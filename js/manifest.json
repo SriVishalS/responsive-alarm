@@ -1,0 +1,15 @@
+{
+      "short_name": "Alarm Clock",
+      "name": "Alarm Web App",
+      "icons": [
+            {
+                  "src": "./sound/weblogo.png",
+                  "type": "image/png",
+                  "sizes": "192x192"
+            }
+      ],
+      "start_url": "index.html",
+      "display": "fullscreen",
+      "background_color": "#000",
+      "theme_color": "#000"
+}

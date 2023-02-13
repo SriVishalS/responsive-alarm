@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer and Alarm Clock</title>
+    <link rel="stylesheet" href="./Font-Awesome-master/css/all.min.css">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+        integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="./sound/weblogo.png">
+    <script src="./js/jquery-3.6.0.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/script.js" defer></script>
+    <link rel="manifest" href="./js/manifest.json">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-size: 17px;
+            font-family: 'Rubik', sans-serif;
+            letter-spacing: 2px;
+            color: gray !important;
+
+        }
+
+        .bg-dark {
+            background-color: #000 !important;
+        }
+
+        .text-light {
+            color: white;
+        }
+
+        .btn-danger {
+            background: transparent !important;
+            border: none !important;
+        }
+
+        :root {
+            --bs-success-rgb: 71, 222, 152 !important;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            background-color: black !important;
+
+        }
+
+        .BTN1 {
+            background-color: beige;
+            bottom: none;
+        }
+
+        .input-group {
+            margin-top: 20px !important;
+        }
+
+        @keyframes blinker {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        #alarm-list:empty:before {
+            content: 'No Alarms So Far';
+        }
+
+        #alarm-list:empty {
+            text-align: center;
+            color: rgb(214, 214, 214)
+        }
+
+        .list-group>div>div {
+            display: flex;
+            border: none !important;
+            height: 100px;
+            line-height: 40px;
+            background-color: #181823;
+            display: flex;
+            justify-content: space-around;
+            padding: 30px;
+            font-size: 25px;
+            border-radius: 30px;
+
+        }
+
+        .card {
+            background-color: transparent;
+        }
+
+        .list-group-item {
+            border: none !important;
+            background-color: transparent !important;
+        }
+
+        .list-group,
+        .card-body {
+            background-color: transparent !important;
+            border: none !important;
+        }
+
+        .card {
+            border: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container py-5" id="page-container">
+        <div class="d-flex justify-content-center align-items-center flex-column my-3">
+            <h1 class="fw-bolder" id="current_time">00:00:00 --</h1>
+            <h4 class="fw-bold" id="current_date">--- -- ----</h4>
+        </div>
+        <div class="row justify-content-center py-3">
+            <!-- Timer Field -->
+
+            <!-- End of Timer Field -->
+            <!-- Alarm List Field -->
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body" style="padding: 0 !important;">
+                        <div class="list-group" id="alarm-list"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- End if Alarm List Field -->
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade bg-dark text-light" id="uniModal" tabindex="-1" aria-labelledby="uniModalLabel"
+        aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="uniModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark rounded-0"
+                        onclick="$('#uniModal form').submit()">Save</button>
+                    <button type="button" class="btn btn-dark rounded-0" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <noscript id="alarm-item-script">
+        <div class="list-group-item list-group-item-action alarm-item">
+            <div class="d-flex w-100">
+                <div class="col-auto flex-grow-1">
+                    <span class="alarm-text">12:00 PM</span>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-sm btn-dark delete-alarm"><i class="fa fa-trash"></i></button>
+                </div>
+            </div>
+        </div>
+    </noscript>
+
+    <noscript id="alarm-form-script">
+        <div class="container-fluid">
+            <form action="" id="alarm-form">
+                <input type="hidden" name="id" value="">
+                <div class="form-group">
+                    <label for="" class="control-label">Time (HRS:MNS)</label>
+                    <div class="input-group mb-3">
+                        <input type="number" name="hour" min="1" max="12" class="form-control" placeholder="HRS"
+                            aria-label="Minutes" required>
+                        <span class="input-group-text">:</span>
+                        <input type="number" name="minutes" min="0" max="59" class="form-control" placeholder="MS"
+                            aria-label="Seconds" required>
+                        <span class="input-group-text"></span>
+                        <select class="form-select" name="meridein" id="meridein" required>
+                            <option>AM</option>
+                            <option>PM</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </noscript>
+    <div class="text-center d-flex container-fluid align-items-center justify-content-evenly w-100"
+        style="bottom: 55px; position: absolute">
+        <button class="btn btn-info BTN1" type="button" id="set_alarm"
+            style="border-radius: 50%; height: 70px; width: 70px;"><i class="fa fa-plus"
+                style="font-size: 20px;"></i></button>
+        <button class="btn  btn-warning d-none BTN1" type="button" id="stop_alarm"
+            style="border-radius: 50%; height: 70px; width: 70px;"><i class="fa fa-stop" style="font-size: 20px;"></i>
+        </button>
+    </div>
+</body>
+
+</html>
